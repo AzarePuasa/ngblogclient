@@ -10,8 +10,10 @@ const Post = require('./model/post');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
 
+mongoose.set('useCreateIndex', true);
+
 app.post('/api/user/login', (req, res) => {
-	mongoose.connect(url,{ useNewUrlParser: true }, function(err){
+	mongoose.connect(url,{ promiseLibrary: global.Promise, useNewUrlParser: true }, function(err){
 		if(err) throw err;
 		User.find({
 			username : req.body.username, password : req.body.password
@@ -34,7 +36,7 @@ app.post('/api/user/login', (req, res) => {
 })
 
 app.post('/api/user/create', (req, res) => {
-	mongoose.connect(url, function(err){
+	mongoose.connect(url,{ promiseLibrary: global.Promise, useNewUrlParser: true }, function(err){
 		if(err) throw err;
 		const user = new User({
 			name: req.body.name,
@@ -52,9 +54,26 @@ app.post('/api/user/create', (req, res) => {
 })
 
 app.post('/api/post/getAllPost', (req, res) => {
-    mongoose.connect(url, { useMongoClient: true } , function(err){
+    mongoose.connect(url, { promiseLibrary: global.Promise,useNewUrlParser: true } , function(err){
         if(err) throw err;
         Post.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/post/createPost', (req, res) => {
+    mongoose.connect(url, { promiseLibrary: global.Promise, useNewUrlParser: true }, function(err){
+        if(err) throw err;
+        const post = new Post({
+            title: req.body.title,
+            description: req.body.description
+        })
+        post.save((err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

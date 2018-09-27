@@ -3,14 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/post.model';
 
 @Injectable()
-export class ShowPostService {
+export class AddPostService {
 
 	constructor(private http: HttpClient){
 
 	}
 	
-	getAllPost(){
-		return this.http.post('/api/post/getAllPost',{})
+	addPost(post: Post){
+		return this.http.post('/api/post/createPost',{
+			title : post.title,
+			description : post.description
+		})
 	}
 
 }
