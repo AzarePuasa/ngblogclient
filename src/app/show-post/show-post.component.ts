@@ -25,13 +25,16 @@ export class ShowPostComponent implements OnInit {
     });
   }
 
-
-
   getAllPost(){
   	this.showPostService.getAllPost().subscribe(result => {
   		console.log('result is ', result);
   		this.posts = result['data'];
   	});
   }
+
+  editPost(post: Post){
+    this.commonService.setPostToEdit(post);
+    console.log('post is ',post);
+}
 
 }
