@@ -26,6 +26,7 @@ export class LoginComponent {
       this.loginService.validateLogin(this.user).subscribe(result => {
         console.log('result is ', result);
         if(result['status'] === 'success') {
+          localStorage.setItem('loggedInUser', this.user.username);
           this.router.navigate(['/home']);
         } else {
           alert('Wrong username password');
@@ -37,5 +38,4 @@ export class LoginComponent {
       alert('enter user name and password');
     }
   }
- 
 }
